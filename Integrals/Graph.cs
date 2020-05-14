@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
@@ -13,26 +14,28 @@ namespace Integrals
 {
     partial class Graph : Form
     {
-        double min;
-        double max;
+        double a;
+        double b;
         int quantity;
         double interval;
         MidpointMethod d;
         SimpsonsMethod d1;
         MonteCarloMethod d2;
         Get_Data g;
+
+        
         
         public Graph()
         {
             InitializeComponent();
         }
-        public Graph(Get_Data f, decimal a, decimal b, decimal quantity,MidpointMethod d)
+        public Graph(Get_Data f, double a, double b, double quantity,MidpointMethod d)
         {
             
-            this.min = (double)a;
-            this.max = (double)b;
+            this.a = a;
+            this.b = b;
             this.quantity = (int)quantity;
-            interval = (double)(b - a) / this.quantity;
+            interval = (b - a) / this.quantity;
             d.EventColumn += OnColumn;
             d.EventProgress += OnProgress;
             d.EventFinish += OnFinish;
@@ -43,10 +46,10 @@ namespace Integrals
             g = f;
             InitializeComponent();
         }
-        public Graph(Get_Data f, decimal a, decimal b, decimal quantity, SimpsonsMethod d)
+        public Graph(Get_Data f, double a, double b, double quantity, SimpsonsMethod d)
         {
-            this.min = (double)a;
-            this.max = (double)b;
+            this.a = a;
+            this.b = b;
             this.quantity = (int)quantity;
             interval = (double)(b - a) / this.quantity;
             d.EventSpline += OnSpline1; 
@@ -58,12 +61,12 @@ namespace Integrals
             g = f;
             InitializeComponent();
         }
-        public Graph(Get_Data f, decimal a, decimal b, decimal quantity, MonteCarloMethod d)
+        public Graph(Get_Data f, double a, double b, double quantity, MonteCarloMethod d)
         {
-            this.min = (double)a;
-            this.max = (double)b;
+            this.a = a;
+            this.b = b;
             this.quantity = (int)quantity;
-            interval = (double)(b - a) / this.quantity;
+            interval = (b - a) / this.quantity;
             d.EventPoints += OnPoints;
             d.EventNeedPoints += OnNeedPoints;
             d.EventProgress += OnProgress;
@@ -78,6 +81,8 @@ namespace Integrals
         private void Graph_Load(object sender, EventArgs e)
         {
             progressBar1.Maximum = quantity;
+           
+
             chart1.Series[0].Name = "Функция";
            
             OnSpline();
@@ -85,17 +90,14 @@ namespace Integrals
             if (d1 != null) d1.Start();
             if (d2 != null) d2.Start();
 
-
-
         }
-        void OnNeedPoints(decimal x, decimal y)
+        void OnNeedPoints(double x, double y)
         {
 
             if (!chart1.InvokeRequired)
             {
                 if (chart1.Series.Count <= 3) chart1.Series.Add("Точки");
                 chart1.Series[3].ChartType = SeriesChartType.Bubble;
-                chart1.Series[3].BorderWidth = 1;
                 chart1.Series[3].Points.AddXY(x, y);
             }
             else
@@ -106,7 +108,7 @@ namespace Integrals
 
         }
 
-        void OnPoints(decimal x, decimal y)
+        void OnPoints(double x, double y, double max)
         {
 
             if (!chart1.InvokeRequired)
@@ -117,34 +119,34 @@ namespace Integrals
 
                     chart1.Series.Add("Прямоугольник");
                     chart1.Series[2].ChartType = SeriesChartType.Line;
-                    chart1.Series[2].BorderWidth = 3;
-                    chart1.Series[2].Points.AddXY(min, 0);
-                    chart1.Series[2].Points.AddXY(min, 2);
-                    chart1.Series[2].Points.AddXY(max, 2);
-                    chart1.Series[2].Points.AddXY(max, 0);
-                    chart1.Series[2].Points.AddXY(min, 0);
-
-
+                    
+                    chart1.Series[2].Points.AddXY(a, 0);
+                    chart1.Series[2].Points.AddXY(a, max);
+                    chart1.Series[2].Points.AddXY(b, max);
+                    chart1.Series[2].Points.AddXY(b, 0);
+                    chart1.Series[2].Points.AddXY(a, 0);
+                    
                 }
                 chart1.Series[1].ChartType = SeriesChartType.Bubble;
-                chart1.Series[1].BorderWidth = 1;
                 chart1.Series[1].Points.AddXY(x, y);
             }
             else
             {
-                object[] pars = { x, y };
+                object[] pars = { x, y ,max };
                 Invoke(new MonteCarloMethod.Points(OnPoints), pars);
             }
 
         }
 
-        void OnColumn(decimal x, decimal y)
+        void OnColumn(double x, double y)
         {
-            
+
             if (!chart1.InvokeRequired)
             {
-               if(chart1.Series.Count<=1) chart1.Series.Add("Метод1");
-               
+                if (chart1.Series.Count <= 1) chart1.Series.Add("Метод1");
+                chart1.Series[1]["PointWidth"] = "1";
+                chart1.Series[1].Color = Color.Transparent;
+                chart1.Series[1].BorderColor = Color.Orange;
                 chart1.Series[1].Points.AddXY(x, y);
             }
             else
@@ -152,36 +154,32 @@ namespace Integrals
                 object[] pars = { x, y };
                 Invoke(new MidpointMethod.Column(OnColumn), pars);
             }
-
         }
 
         void OnSpline()
         {
             
+            
             chart1.Series[0].ChartType = SeriesChartType.Spline;
-            chart1.Series[0].BorderWidth= 7;
-            double x = min;
-            int N = quantity+1;
+            double x = a;
+            int N = 4*quantity+1;
             for (int i = 1; i <=N; i++)
             {
                 double y = func(x);
                 chart1.Series[0].Points.AddXY(x, y);
-                x += interval;
+                x += interval/4;
             }
-            //chart1.Series[1].Points.Max();
+            
         }
-        void OnSpline1(decimal x, decimal y)
+        void OnSpline1(double x, double y)
         {
 
             if (!chart1.InvokeRequired)
             {
-                //count++;
-
                 if (chart1.Series.Count <= 1) chart1.Series.Add("Метод2");
                 chart1.Series[1].ChartType = SeriesChartType.Spline;
-                chart1.Series[1].BorderWidth = 3;
                 chart1.Series[1].Points.AddXY(x, y);
-                chart1.Series[1].Sort(0);
+                chart1.Series[1].Sort(PointSortOrder.Ascending, "X");
             }
             else
             {
@@ -201,7 +199,7 @@ namespace Integrals
                 if (d2 != null) Invoke(new MonteCarloMethod.Progress(OnProgress), value);
             }
         }
-        private void OnFinish(decimal resVal)
+        private void OnFinish(double resVal)
         {
             if (!Answer.InvokeRequired)
             {
@@ -215,7 +213,7 @@ namespace Integrals
 
             }
         }
-        private void OnTime(decimal resVal)
+        private void OnTime(double resVal)
         {
             if (!label1.InvokeRequired)
             {
@@ -247,7 +245,40 @@ namespace Integrals
         {
             Get_Data g1 = new Get_Data(this);
             g1.Show();
-            
+        }
+
+        double maxi()
+        {
+            const double epsilon = 1e-10;
+            double a1 = a;
+            double b1 = b;
+
+            double goldenRatio = (1 + Math.Sqrt(5)) / 2; // "Золотое" число
+
+            double x1, x2; // Точки, делящие текущий отрезок в отношении золотого сечения
+            while (Math.Abs(b1 - a1) > epsilon)
+            {
+                x1 = b1 - (b1 - a1) / goldenRatio;
+                x2 = a1 + (b1 - a1) / goldenRatio;
+                if (func(x1) <= func(x2)) a1 = x1;
+                else b1 = x2;
+            }
+            return func((a1 + b1) / 2);
+        }
+
+        private void Scale_Click(object sender, EventArgs e)
+        {
+            chart1.ChartAreas[0].AxisX.ScaleView.Zoom(0,b);
+            chart1.ChartAreas[0].CursorX.IsUserEnabled = true;
+            chart1.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+            chart1.ChartAreas[0].AxisX.ScaleView.Zoomable = true;
+            chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+
+            chart1.ChartAreas[0].AxisY.ScaleView.Zoom(0, maxi());
+            chart1.ChartAreas[0].CursorY.IsUserEnabled = true;
+            chart1.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            chart1.ChartAreas[0].AxisY.ScaleView.Zoomable = true;
+            chart1.ChartAreas[0].AxisY.ScrollBar.IsPositionedInside = true;
         }
     }   
 }

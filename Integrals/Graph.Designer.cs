@@ -37,6 +37,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.Scale = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,11 +101,22 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // Scale
+            // 
+            this.Scale.Location = new System.Drawing.Point(812, 376);
+            this.Scale.Name = "Scale";
+            this.Scale.Size = new System.Drawing.Size(112, 31);
+            this.Scale.TabIndex = 6;
+            this.Scale.Text = "Масштаб";
+            this.Scale.UseVisualStyleBackColor = true;
+            this.Scale.Click += new System.EventHandler(this.Scale_Click);
+            // 
             // Graph
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(940, 490);
+            this.Controls.Add(this.Scale);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -132,5 +144,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button Scale;
     }
 }

@@ -94,26 +94,46 @@
             this.numA.Location = new System.Drawing.Point(421, 60);
             this.numA.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numA.Maximum = new decimal(new int[] {
-            10000,
+            48,
+            0,
+            0,
+            0});
+            this.numA.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
             this.numA.Name = "numA";
             this.numA.Size = new System.Drawing.Size(103, 22);
             this.numA.TabIndex = 4;
+            this.numA.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
             // 
             // numB
             // 
             this.numB.Location = new System.Drawing.Point(421, 108);
             this.numB.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.numB.Maximum = new decimal(new int[] {
-            10000,
+            50,
+            0,
+            0,
+            0});
+            this.numB.Minimum = new decimal(new int[] {
+            2,
             0,
             0,
             0});
             this.numB.Name = "numB";
             this.numB.Size = new System.Drawing.Size(103, 22);
             this.numB.TabIndex = 5;
+            this.numB.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             // 
             // numQ
             // 
@@ -124,9 +144,19 @@
             0,
             0,
             0});
+            this.numQ.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numQ.Name = "numQ";
             this.numQ.Size = new System.Drawing.Size(103, 22);
             this.numQ.TabIndex = 6;
+            this.numQ.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             // 
             // panel1
             // 

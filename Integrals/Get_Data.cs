@@ -30,22 +30,22 @@ namespace Integrals
             if (listBox1.SelectedIndex == 0)
             {
                 
-                MidpointMethod s = new MidpointMethod(numA.Value,numB.Value,numQ.Value);
+                MidpointMethod s = new MidpointMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
 
-                gr = new Graph(this, numA.Value, numB.Value, numQ.Value,s);
+                gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value,s);
                 gr.Show();
                 
             }
             if (listBox1.SelectedIndex == 1)
             {
-                SimpsonsMethod s = new SimpsonsMethod(numA.Value, numB.Value, numQ.Value);
-                gr = new Graph(this, numA.Value, numB.Value, numQ.Value,s);
+                SimpsonsMethod s = new SimpsonsMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
+                gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value,s);
                 gr.Show();
             }
             if (listBox1.SelectedIndex == 2)
             {
-                MonteCarloMethod s = new MonteCarloMethod(numA.Value, numB.Value, numQ.Value);
-                gr = new Graph(this, numA.Value, numB.Value, numQ.Value, s);
+                MonteCarloMethod s = new MonteCarloMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
+                gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value, s);
                 gr.Show();
              
             }
