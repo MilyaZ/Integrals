@@ -27,28 +27,32 @@ namespace Integrals
         Graph gr;
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex == 0)
+            if (numA.Value < numB.Value)
             {
-                
-                MidpointMethod s = new MidpointMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
+                if (listBox1.SelectedIndex == 0)
+                {
 
-                gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value,s);
-                gr.Show();
-                
+                    MidpointMethod s = new MidpointMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
+
+                    gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value, s);
+                    gr.Show();
+
+                }
+                if (listBox1.SelectedIndex == 1)
+                {
+                    SimpsonsMethod s = new SimpsonsMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
+                    gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value, s);
+                    gr.Show();
+                }
+                if (listBox1.SelectedIndex == 2)
+                {
+                    MonteCarloMethod s = new MonteCarloMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
+                    gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value, s);
+                    gr.Show();
+
+                }
             }
-            if (listBox1.SelectedIndex == 1)
-            {
-                SimpsonsMethod s = new SimpsonsMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
-                gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value,s);
-                gr.Show();
-            }
-            if (listBox1.SelectedIndex == 2)
-            {
-                MonteCarloMethod s = new MonteCarloMethod((double)numA.Value, (double)numB.Value, (double)numQ.Value);
-                gr = new Graph(this, (double)numA.Value, (double)numB.Value, (double)numQ.Value, s);
-                gr.Show();
-             
-            }
+            else label2.Text = "ErRoR";
         }
 
         private void Get_Data_FormClosing(object sender, FormClosingEventArgs e)
